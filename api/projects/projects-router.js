@@ -1,9 +1,6 @@
 // Write your "projects" router here!
 const express = require('express')
-const { 
-    validateProjectId, 
-    validateProjects, 
-} = require('./projects-middleware')
+const { validateProjectsId, validateProjects, validateProjectWithCompletedField } = require('./projects-middleware')
 const Projects = require('./projects-model')
 
 const router = express.Router()
@@ -18,7 +15,7 @@ router.get ('/', (req, res, next) => {
 })
 
 
-router.get ('/:id', validateProjectId, (req, res) => {
+router.get ('/:id', validateProjectsId, (req, res) => {
     res.json(req.project)
 })
 
@@ -30,8 +27,8 @@ router.post ('/', validateProjects, (req, res, next) => {
         .catch(next)
 })
 
-router.put ('/:id', validateProjectId, validateProjects, (req, res, next) => {
-    Projects.update(req.params.id, req.body)
+router.put ('/:id', validateProjectsId, validateProjectWithCompletedField, (req, res, next) => {
+    Projects.update(req.params.id, { name: req.name, description: req.description, completed: req.body.completed })
         .then(() => {
             return Projects.get(req.params.id)
         })
@@ -40,7 +37,7 @@ router.put ('/:id', validateProjectId, validateProjects, (req, res, next) => {
         })
         .catch(next)
 })
-router.delete ('/:id', validateProjectId, async (req, res, next) => {
+router.delete ('/:id', validateProjectsId, async (req, res, next) => {
     try {
         await Projects.remove(req.params.id)
         res.json(req.project)
@@ -49,7 +46,7 @@ router.delete ('/:id', validateProjectId, async (req, res, next) => {
     }
 })
 
-router.get ('/:id/actions', validateProjectId, async (req, res, next) => {
+router.get ('/:id/actions', validateProjectsId, async (req, res, next) => {
     try {
         const actions = await Projects.getProjectActions(req.params.id)
         res.json(actions)
