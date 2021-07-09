@@ -12,3 +12,22 @@ I need this code, but don't know where, perhaps should make some middleware, don
 
 Pull your server into this file and start it!
 */
+const express = require('express');
+
+require('dotenv').config()
+
+const cors = require('cors');
+
+const server = require('./api/server');
+
+server.use(cors());
+
+
+
+const PORT = process.env.PORT || 5000;
+
+console.log(process.env.PORT, process.env.NODE_ENV);
+console.log(`listening on ${PORT}`);
+server.listen(PORT, () => {
+	console.log(`\n*** Server Running on http://localhost:${PORT}***\n`);
+});
