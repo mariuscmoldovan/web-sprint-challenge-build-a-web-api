@@ -2,7 +2,7 @@
 const express = require('express')
 const Actions = require('./actions-model')
 
-const { validateActionsId,validateActions } = require('./actions-middlware')
+const { validateActionsId, validateActions } = require('./actions-middlware')
 
 const router = express.Router()
 
@@ -50,6 +50,7 @@ router.use((err, req, res, next) => { //eslint-disable-line
     res.status(err.status || 500).json({
         message: err.message,
         customMessage: err.message,
+        stack: err.stack,
     })
 })
 

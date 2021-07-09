@@ -1,7 +1,7 @@
 // add middlewares here related to actions
 const Actions = require('./actions-model')
 
-//  get action id 
+//  ACTION ID VALIDATION
 async function validateActionsId (req, res, next) {
   
     try {
@@ -17,7 +17,7 @@ async function validateActionsId (req, res, next) {
     }
 }
 
-// validate required notes and description 
+// ACTION VALIDATER FOR NOTES, DESCRIPTION
 function validateActions (req, res, next) {
     const { description, notes, project_id} = req.body
     if (!notes || !notes.trim() || !description || !description.trim() || !project_id) {

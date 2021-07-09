@@ -1,7 +1,7 @@
 // add middlewares here related to projects
 const Projects = require('./projects-model')
 
-//get project id 
+// PROJECT ID VADIDATION
 async function validateProjectsId (req, res, next) {
     try {
         const project = await Projects.get(req.params.id)
@@ -15,8 +15,7 @@ async function validateProjectsId (req, res, next) {
         next(err)
     }
 }
-
-// validate  name and description fields for projects
+// PROJECT VALIDATION NAME, DESCRIPTION
 function validateProjects (req, res, next) {
     const { name, description} = req.body
     if (!name || !name.trim() || !description || !description.trim()) {
@@ -30,6 +29,7 @@ function validateProjects (req, res, next) {
     }
 }
 
+// PROJECT VALIDATION NAME, DESCRIPTION, COMPLETED
 function validateProjectWithCompletedField (req, res, next) {
     const { name, description, completed } = req.body
     if (!name || !name.trim() || !description || !description.trim() || !completed) {
@@ -43,7 +43,6 @@ function validateProjectWithCompletedField (req, res, next) {
         next()
     }
 }
-
 
 module.exports = {
     validateProjectsId,

@@ -5,7 +5,6 @@ const Projects = require('./projects-model')
 
 const router = express.Router()
 
-
 router.get ('/', (req, res, next) => {
     Projects.get()
         .then(projects => {
@@ -13,7 +12,6 @@ router.get ('/', (req, res, next) => {
         })
         .catch(next)
 })
-
 
 router.get ('/:id', validateProjectsId, (req, res) => {
     res.json(req.project)
@@ -28,7 +26,7 @@ router.post ('/', validateProjects, (req, res, next) => {
 })
 
 router.put ('/:id', validateProjectsId, validateProjectWithCompletedField, (req, res, next) => {
-    Projects.update(req.params.id, { name: req.name, description: req.description, completed: req.body.completed })
+    Projects.update(req.params.id, req.body)
         .then(() => {
             return Projects.get(req.params.id)
         })
@@ -37,6 +35,7 @@ router.put ('/:id', validateProjectsId, validateProjectWithCompletedField, (req,
         })
         .catch(next)
 })
+
 router.delete ('/:id', validateProjectsId, async (req, res, next) => {
     try {
         await Projects.remove(req.params.id)
@@ -55,11 +54,11 @@ router.get ('/:id/actions', validateProjectsId, async (req, res, next) => {
     }
 })
 
-
 router.use((err, req, res, next) => { //eslint-disable-line
     res.status(err.status || 500).json({
         message: err.message,
         customMessage: err.message,
+        stack: err.stack,
     })
 })
 module.exports = router
